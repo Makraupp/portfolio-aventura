@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Matheus Kraupp · Aventura</title>
+<meta name="description" content="Fotografia outdoor de aventura. Do amanhecer ao pôr do sol: Islândia, Irlanda, Eslovênia, Dolomitas, Chile e Brasil.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{SITE}}">
+<meta property="og:title" content="Matheus Kraupp · Aventura">
+<meta property="og:description" content="Fotografia outdoor de aventura. Do amanhecer ao pôr do sol.">
+<meta property="og:image" content="{{OG}}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="{{GROUND}}">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230b1620'/><path d='M5 25 13 9l5 9 3-5 6 12z' fill='%23e9eef0'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ground: {{GROUND}};
+    --ink: #eef1ee;
+    --muted: rgba(238, 241, 238, .6);
+    --gutter: clamp(16px, 3vw, 44px);
+    --gap: clamp(10px, 1.6vw, 24px);
+    --ease: cubic-bezier(.2, .7, .1, 1);
+    --step-small: clamp(.8125rem, .79rem + .1vw, .875rem);
+    --step-body: clamp(1rem, .96rem + .2vw, 1.125rem);
+    --step-lead: clamp(1.25rem, 1.05rem + .9vw, 1.75rem);
+    --step-head: clamp(3.4rem, 1rem + 11vw, 11.5rem);
+  }
+
+  html { background: var(--ground); color: var(--ink); }
+  body {
+    font-family: 'Archivo', system-ui, sans-serif; font-size: var(--step-body); line-height: 1.5;
+    -webkit-font-smoothing: antialiased; background: transparent; overflow-x: hidden;
+  }
+  img { display: block; max-width: 100%; height: auto; }
+  a { color: inherit; }
+  ::selection { background: var(--ink); color: var(--ground); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+  /* ---- O ambiente: cor da foto, a foto desfocada, a textura do lugar e o mapa do país ---- */
+  .air { position: fixed; inset: 0; z-index: -1; background: var(--ground); transition: background-color 1.2s var(--ease); overflow: hidden; }
+  .spill {
+    position: absolute; inset: -12%; background-size: cover; background-position: center;
+    filter: blur(70px) saturate(1.35); opacity: 0; transform: scale(1.1); transition: opacity 1.4s var(--ease);
+  }
+  .spill.on { opacity: .5; }
+  .air::after { content: ""; position: absolute; inset: 0; background: var(--ground); opacity: .5; transition: background-color 1.2s var(--ease); }
+  .tex, .map { position: absolute; z-index: 1; opacity: 0; transition: opacity 1.3s var(--ease); }
+  .tex { inset: 0; background-repeat: repeat; }
+  .tex.on { opacity: 1; }
+  .tex[data-tex="basalt"]   { background-size: 104px 180px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='104' height='180' fill='none' stroke='%23fff' stroke-opacity='.13' stroke-width='1.1'%3E%3Cpath d='M26 0 52 15v30L26 60 0 45V15Zm52 45 26 15v30L78 105 52 90V60ZM26 90l26 15v30l-26 15L0 135v-30Zm52 45 26 15v30M52 150v30'/%3E%3C/svg%3E"); }
+  .tex[data-tex="strata"]   { background-size: 640px 120px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='120' fill='none' stroke='%23fff' stroke-opacity='.12' stroke-width='1'%3E%3Cpath d='M0 20h180l14 3h210l10-2h226M0 52h90l18 4h300l12-3h220M0 86h240l9 2h150l14-3h227M0 110h420l16 3h204'/%3E%3C/svg%3E"); }
+  .tex[data-tex="contrail"] { background-size: 760px 520px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='760' height='520' fill='none' stroke='%23fff' stroke-opacity='.12' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M-20 480C160 420 260 300 300 120M10 520C220 450 330 320 380 140M60 540c240-60 380-200 440-390M520 520c40-120 120-260 260-340'/%3E%3C/svg%3E"); }
+  .tex[data-tex="ripple"]   { background-size: 440px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='440' height='440' fill='none' stroke='%23fff' stroke-opacity='.12' stroke-width='1'%3E%3Cellipse cx='220' cy='220' rx='40' ry='14'/%3E%3Cellipse cx='220' cy='220' rx='90' ry='32'/%3E%3Cellipse cx='220' cy='220' rx='150' ry='54'/%3E%3Cellipse cx='220' cy='220' rx='215' ry='78'/%3E%3C/svg%3E"); }
+  .tex[data-tex="ridge"]    { background-size: 620px 200px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='620' height='200' fill='none' stroke='%23fff' stroke-opacity='.13' stroke-width='1.1' stroke-linejoin='bevel'%3E%3Cpath d='M0 150 40 110l18 14 34-62 20 30 26-56 22 44 30-20 40 70 36-40 30 26 46-70 24 36 38-24 40 60 30-22 40 54 36-30 30 30M0 190l60-30 40 16 60-40 50 30 70-44 60 40 50-26 80 34 70-30 80 50'/%3E%3C/svg%3E"); }
+  .tex[data-tex="tracks"]   { background-size: 360px 520px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='520' fill='none' stroke='%23fff' stroke-opacity='.13' stroke-width='1.1'%3E%3Cpath d='M120 0c-80 60 80 130 0 200s80 130 0 200-40 90 0 120M130 0c-80 60 80 130 0 200s80 130 0 200-40 90 0 120M270 -20c60 80-60 150 0 230s-60 160 0 240'/%3E%3C/svg%3E"); }
+  .tex[data-tex="contour"]  { background-size: 560px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='560' height='560' fill='none' stroke='%23fff' stroke-opacity='.13' stroke-width='1.1'%3E%3Cpath d='M280 150c90 0 160 50 150 130s-90 120-170 110-140-70-120-140 50-100 140-100Z'/%3E%3Cpath d='M280 100c120 0 210 70 196 180S356 450 250 436 70 344 96 246 160 100 280 100Z'/%3E%3Cpath d='M282 50c150 0 262 90 244 230S440 506 240 490 20 380 50 240 130 50 282 50Z'/%3E%3Cpath d='M284 210c40 0 76 26 70 66s-42 58-80 52-62-34-54-68 24-50 64-50Z'/%3E%3C/svg%3E"); }
+  .tex[data-tex="water"]    { background-size: 520px 90px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='90' fill='none' stroke='%23fff' stroke-opacity='.13' stroke-width='1.1'%3E%3Cpath d='M0 30c65-18 130 18 195 0s130-18 195 0 130 18 130 0M0 75c65-14 130 14 195 0s130-14 195 0 130 14 130 0'/%3E%3C/svg%3E"); }
+  .tex[data-tex="sun"]      { background-size: 900px 520px; background-position: center bottom; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='520' fill='none' stroke='%23fff' stroke-opacity='.1' stroke-width='1.1'%3E%3Ccircle cx='450' cy='520' r='90'/%3E%3Ccircle cx='450' cy='520' r='180'/%3E%3Ccircle cx='450' cy='520' r='290'/%3E%3Ccircle cx='450' cy='520' r='420'/%3E%3C/svg%3E"); }
+
+  .map { right: calc(var(--gutter) * 1.5); top: 12vh; height: 76vh; width: 40vw; }
+  .map.on { opacity: 1; }
+  .map svg { width: 100%; height: 100%; overflow: visible; }
+  .map path { fill: rgba(255, 255, 255, .03); stroke: rgba(255, 255, 255, .26); stroke-width: 1.4; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+  .map .dot { transition: transform 1.4s var(--ease); }
+  .map .dot circle { fill: var(--ink); }
+  .map .dot .ring { fill: none; stroke: var(--ink); stroke-width: 1.2; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; animation: ping 2.6s var(--ease) infinite; }
+  @keyframes ping { from { transform: scale(.4); opacity: .9; } to { transform: scale(2.4); opacity: 0; } }
+
+  /* ---- Barra e coordenadas ---- */
+  .bar { position: fixed; top: 0; left: 0; right: 0; z-index: 20; display: flex; justify-content: space-between; align-items: baseline; padding: 18px var(--gutter); }
+  .bar a { text-decoration: none; font-size: var(--step-small); font-weight: 500; transition: opacity .25s; }
+  .bar a:hover { opacity: .65; }
+  .wordmark { font-weight: 800; font-stretch: 62%; text-transform: uppercase; font-size: 1.35rem !important; }
+  .gps { position: fixed; right: var(--gutter); bottom: 18px; z-index: 20; text-align: right; font-size: var(--step-small); font-variant-numeric: tabular-nums; pointer-events: none; transition: opacity .6s; }
+  .gps b { display: block; font-weight: 600; }
+  .gps span { color: var(--muted); }
+
+  /* ---- Amanhecer e pôr do sol: começo e fim da história ---- */
+  .sky { position: relative; height: 100svh; min-height: 560px; overflow: hidden; }
+  .sky img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .sky.dawn img { animation: settle 2.6s var(--ease) both; }
+  .sky.dawn::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 45%; background: linear-gradient(to top, rgba(4, 10, 18, .72), rgba(4, 10, 18, 0)); } /* scrim sob o título, taste-skill-ignore */
+  .sky-copy { position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(56px, 9vh, 96px); z-index: 2; }
+  .sky h1 { font-weight: 800; font-stretch: 62%; text-transform: uppercase; font-size: var(--step-head); line-height: .86; letter-spacing: -.01em; }
+  .sky p { margin-top: 16px; font-size: var(--step-lead); }
+  @keyframes settle { from { transform: scale(1.08); } to { transform: scale(1); } }
+
+  /* ---- As linhas da história ---- */
+  .row { position: relative; padding: 9vh var(--gutter); display: grid; gap: var(--gap); }
+  .shot { min-width: 0; }
+  .shot img { cursor: zoom-in; }
+  .row.full { place-items: center; min-height: 100svh; }
+  .row.full img { max-height: 86svh; width: auto; }
+  .row.full .shot.tall img { max-height: 88svh; }
+  .row.pair { grid-template-columns: 1fr 1fr; align-items: end; padding-inline: calc(var(--gutter) * 2.5); }
+  .row.pair .shot:last-child { transform: translateY(8vh); }
+  .row.pair img, .row.trio img, .row.lead img { width: 100%; }
+  .row.pair .shot.tall, .row.lead .shot.tall { justify-self: center; width: 78%; }
+  .row.trio { grid-template-columns: repeat(3, 1fr); align-items: center; }
+  .row.lead { grid-template-columns: 7fr 4fr; align-items: end; }
+  .row.lead .shot:last-child { padding-bottom: 14vh; }
+  .row.lead:nth-of-type(even) { grid-template-columns: 4fr 7fr; }
+  .row.lead:nth-of-type(even) .shot:first-child { order: 2; }
+  .row.rest { padding: 0; min-height: 0; }
+  .row.rest img { width: 100%; max-height: none; height: 100svh; object-fit: cover; }
+  .chapter .row:last-child { padding-bottom: 22vh; }
+
+  /* ---- Contato ---- */
+  .contact { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; gap: 40px; padding: 14vh var(--gutter) 28px; background: var(--ink); color: #0d1418; }
+  .contact .ask { font-size: var(--step-lead); max-width: 26ch; }
+  .mail { align-self: end; text-decoration: none; font-weight: 800; font-stretch: 62%; font-size: clamp(2.5rem, .4rem + 10.4vw, 12rem); line-height: .9; overflow-wrap: anywhere; transition: opacity .3s; }
+  .mail:hover { opacity: .65; }
+  .contact-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 32px; }
+  .contact-row a { text-decoration: none; font-weight: 500; }
+  .contact-row a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .contact-row span { color: rgba(13, 20, 24, .6); }
+  .contact-row small { font-size: var(--step-small); color: rgba(13, 20, 24, .6); }
+
+  /* ---- Foto ampliada ---- */
+  dialog { margin: auto; border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 96svh; }
+  dialog::backdrop { background: rgba(4, 6, 8, .92); }
+  dialog img { max-width: 96vw; max-height: 96svh; width: auto; cursor: zoom-out; }
+
+  /* ---- Entrada ---- */
+  .js .row:not(.rest) .shot { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease), transform 1.2s var(--ease); }
+  .js .row .shot:nth-child(2) { transition-delay: .08s; }
+  .js .row .shot:nth-child(3) { transition-delay: .16s; }
+  .js .row.in .shot { opacity: 1; transform: none; }
+  .js .row.pair.in .shot:last-child { transform: translateY(8vh); }
+
+  @media (max-width: 720px) {
+    .row, .row.pair { padding: 6vh var(--gutter); }
+    .row.full { min-height: 0; }
+    .row.full img, .row.full .shot.tall img { max-height: 82svh; }
+    .row.pair, .row.trio, .row.lead, .row.lead:nth-of-type(even) { grid-template-columns: 1fr; }
+    .row.pair .shot:last-child, .js .row.pair.in .shot:last-child { transform: none; }
+    .row.lead .shot:last-child { padding-bottom: 0; }
+    .row.pair .shot.tall, .row.lead .shot.tall { width: 100%; }
+    .row.lead:nth-of-type(even) .shot:first-child { order: 0; }
+    .map { width: 70vw; height: 50vh; top: 25vh; right: -8vw; opacity: 0; }
+    .map.on { opacity: .55; }
+    .contact-row { flex-direction: column; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+    .js .row .shot { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="air" aria-hidden="true">
+  <div class="spill"></div><div class="spill"></div>
+  <div class="tex"></div><div class="tex"></div>
+  <div class="map"><svg><path></path><g class="dot"><circle r="5"></circle><circle class="ring" r="9"></circle></g></svg></div>
+  <div class="map"><svg><path></path><g class="dot"><circle r="5"></circle><circle class="ring" r="9"></circle></g></svg></div>
+</div>
+
+<header class="bar">
+  <a class="wordmark" href="#topo">Kraupp</a>
+  <a href="#contato">Contato</a>
+</header>
+
+<div class="gps" aria-hidden="true"><b class="gps-name"></b><span class="gps-coord"></span></div>
+
+<main>
+  <section class="sky dawn" id="topo" {{DAWN_ATTRS}} data-name="" data-outline="">
+    {{DAWN_IMG}}
+    <div class="sky-copy">
+      <h1>Matheus Kraupp</h1>
+      <p>Fotografia de aventura.</p>
+    </div>
+  </section>
+
+{{STORY}}
+
+  <section class="sky dusk" {{DUSK_ATTRS}} data-name="" data-outline="">
+    {{DUSK_IMG}}
+  </section>
+
+  <section class="contact" id="contato">
+    <p class="ask">Expedição, campanha ou marca outdoor? Me conta para onde vamos.</p>
+    <a class="mail" href="mailto:makraupp@gmail.com?subject=Fotografia%20de%20aventura">makraupp@<br>gmail.com</a>
+    <div class="contact-row">
+      <a href="https://wa.me/5511976791813">WhatsApp (11) 97679-1813</a>
+      <a href="https://instagram.com/matheuskraupp">Instagram @matheuskraupp</a>
+      <span>São Paulo, Brasil · 2026</span>
+      <small>Contornos dos países: Natural Earth, domínio público.</small>
+    </div>
+  </section>
+</main>
+
+<dialog aria-label="Foto ampliada"><img alt=""></dialog>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  root.classList.add('js');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const OUTLINES = {{OUTLINES}};
+  const NAMES = { islandia: 'Islândia', irlanda: 'Irlanda', eslovenia: 'Eslovênia', dolomitas: 'Dolomitas', chile: 'Chile', itatiaia: 'Itatiaia', surf: 'Surf' };
+  const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
+  const spills = $$('.spill'), texs = $$('.tex'), maps = $$('.map');
+  const gpsName = $('.gps-name'), gpsCoord = $('.gps-coord'), theme = $('meta[name=theme-color]');
+  let spillLayer = 0, texLayer = 0, mapLayer = 0, curTex = '', curMap = '', cur = { lat: 0, lon: 0 }, raf;
+
+  const fmt = (v, pos, neg) => Math.abs(v).toFixed(4) + '° ' + (v < 0 ? neg : pos);
+  const show = (lat, lon) => gpsCoord.textContent = fmt(lat, 'N', 'S') + '  ' + fmt(lon, 'L', 'O');
+
+  // As coordenadas e o ponto no mapa viajam de um lugar ao outro.
+  function travel(lat, lon) {
+    cancelAnimationFrame(raf);
+    if (reduce) { cur = { lat, lon }; return show(lat, lon); }
+    const from = { ...cur }, t0 = performance.now();
+    const step = now => {
+      const k = Math.min(1, (now - t0) / 1400), e = 1 - Math.pow(1 - k, 3);
+      cur = { lat: from.lat + (lat - from.lat) * e, lon: from.lon + (lon - from.lon) * e };
+      show(cur.lat, cur.lon);
+      if (k < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+  }
+
+  function place(map, o, lat, lon) {
+    const x = (lon * o.k - o.minx) * o.s, y = (-lat - o.miny) * o.s;
+    map.querySelector('.dot').style.transform = `translate(${x}px, ${y}px) scale(${o.w / 260})`;
+  }
+
+  function setMap(name, lat, lon) {
+    if (name === curMap) { if (name) place(maps[mapLayer], OUTLINES[name], lat, lon); return; }
+    curMap = name;
+    mapLayer ^= 1;
+    const m = maps[mapLayer];
+    if (name) {
+      const o = OUTLINES[name];
+      m.querySelector('svg').setAttribute('viewBox', `-40 -40 ${o.w + 80} ${o.h + 80}`);
+      m.querySelector('path').setAttribute('d', o.d);
+      place(m, o, lat, lon);
+      m.classList.add('on');
+    }
+    maps[mapLayer ^ 1].classList.remove('on');
+  }
+
+  function setTex(t) {
+    if (t === curTex) return;
+    curTex = t; texLayer ^= 1;
+    texs[texLayer].dataset.tex = t; texs[texLayer].classList.add('on'); texs[texLayer ^ 1].classList.remove('on');
+  }
+
+  let active = null;
+  function enter(el) {
+    if (el === active) return;
+    active = el;
+    const ch = el.closest('.chapter');
+    root.style.setProperty('--ground', el.dataset.ground);
+    theme.content = el.dataset.ground;
+    spillLayer ^= 1;
+    spills[spillLayer].style.backgroundImage = `url("${el.dataset.spill}")`;
+    spills[spillLayer].classList.add('on'); spills[spillLayer ^ 1].classList.remove('on');
+    setTex(el.dataset.tex || (ch && ch.dataset.tex) || 'sun');
+    const lat = +el.dataset.lat, lon = +el.dataset.lon;
+    setMap(ch ? ch.dataset.outline : '', lat, lon);
+    gpsName.textContent = ch ? NAMES[ch.id] : '';
+    travel(lat, lon);
+  }
+
+  const stops = $$('[data-ground]');
+  const watch = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && enter(e.target)), { rootMargin: '-45% 0px -45% 0px' });
+  stops.forEach(s => watch.observe(s));
+
+  const reveal = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); reveal.unobserve(e.target); }
+  }), { rootMargin: '0px 0px -10% 0px' });
+  $$('.row').forEach(r => reveal.observe(r));
+
+  // Clique numa foto: ela abre inteira.
+  const dlg = $('dialog'), big = dlg.querySelector('img');
+  document.addEventListener('click', e => {
+    const im = e.target.closest('.shot img');
+    if (im) { big.src = im.currentSrc.replace('-s.webp', '.webp'); dlg.showModal(); }
+    else if (e.target.closest('dialog')) dlg.close();
+  });
+
+  const gps = $('.gps');
+  new IntersectionObserver(([e]) => gps.style.opacity = e.isIntersecting ? 0 : 1, { threshold: .25 }).observe($('.contact'));
+
+  cur = { lat: +stops[0].dataset.lat, lon: +stops[0].dataset.lon };
+  enter(stops[0]);
+})();
+</script>
+</body>
+</html>
