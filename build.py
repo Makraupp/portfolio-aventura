@@ -101,10 +101,13 @@ STORY = [
         ("trio", "airshow", ["Ireland air show/IMG_5122.CR2", "Ireland air show/IMG_5127.CR2", "Ireland air show/IMG_5129.CR2"], "contrail"),
         ("pair", "airshow", ["Ireland air show/IMG_5133.CR2", "Ireland air show/IMG_5213.CR2"], "contrail"),
         ("pair", "airshow", ["Ireland air show/IMG_5141.CR2", "Ireland air show/IMG_5153.CR2"], "contrail"),
+        ("pair", "airshow", ["Ireland air show/IMG_4851.CR2", "Ireland air show/IMG_4898.CR2"], "contrail"),
         ("lead", "airshow", ["Ireland air show/IMG_5323.CR2", "Ireland air show/IMG_5331.CR2"], "contrail"),
     ]),
     ("eslovenia", "Eslovênia", "eslovenia", "ripple", [
-        ("lead", "bled", ["1 -Melhores/IMG_4002.JPG", "1 -Melhores/IMG_4038.JPG"]),
+        ("full", "bled", ["Lake Bled/bled-mirante.jpg"]),
+        ("pair", "bled", ["Lake Bled/bled-sup-castelo.jpg", "1 -Melhores/IMG_4038.JPG"]),
+        ("lead", "bled", ["Lake Bled/bled-igreja-da-agua.jpg", "1 -Melhores/IMG_4002.JPG"]),
     ]),
     ("surf", "Surf", "brasil", "water", [
         ("full", "surf", [SURF + "IMG_9880.JPG"]),
